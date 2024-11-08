@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private InputReader inputReader;
     [SerializeField] private GameObject flashlight;
+    [SerializeField] private GameObject flashlightHolder;
 
 
     // Start is called before the first frame update
@@ -87,15 +88,16 @@ public class PlayerController : MonoBehaviour
     private IEnumerator LerpLight()
     {
         float takenTime = 0f;
-        float targetRotation = 0;
-        float currentRotation = 180;
-        flashlight.transform.rotation = Quaternion.Euler(transform.rotation.x, currentRotation, transform.rotation.z);
+        float targetYRotation = 0;
+        float startYRotation = 180f;
+        Vector3 currentRotation = flashlightHolder.transform.eulerAngles;
 
         while (takenTime < lightLerpDuration)
         {
+            Debug.Log(takenTime / lightLerpDuration);
             takenTime += Time.deltaTime;
-            currentRotation = Mathf.Lerp(currentRotation, targetRotation, takenTime / lightLerpDuration);
-            flashlight.transform.rotation = Quaternion.Euler(transform.rotation.x, currentRotation, transform.rotation.z);
+            currentRotation.y = Mathf.Lerp(startYRotation, targetYRotation, takenTime / lightLerpDuration);
+            flashlightHolder.transform.eulerAngles = currentRotation;
             yield return null;
         }
         lightControlDisabled = false;
