@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(menuName = "InputReader")]
-public class InputReader : ScriptableObject, InputMap.IMovementActions
+public class InputReader : ScriptableObject, InputMap.IMovementActions, InputMap.IDialogueActions, InputMap.IGameOverActions
 {
     private InputMap inputMap;
 
@@ -17,14 +17,33 @@ public class InputReader : ScriptableObject, InputMap.IMovementActions
     public event Action LookBigCanceledEvent;
     public event Action TurnLightEvent;
 
+    public event Action NextDialogueEvent;
+    public event Action SkipDialogueEvent;
+
+    public event Action RestartEvent;
+    public event Action QuitEvent;
+
     public void EnableMovement()
     {
         inputMap.Movement.Enable();
+        inputMap.Dialogue.Disable();
     }
 
     public void DisableMovement()
     {
         inputMap.Movement.Disable();
+    }
+
+    public void EnableDialogue()
+    {
+        inputMap.Movement.Disable();
+        inputMap.Dialogue.Enable();
+    }
+
+    public void SetGameOver()
+    {
+        inputMap.Dialogue.Disable();
+        inputMap.GameOver.Enable();
     }
 
     private void OnEnable()
@@ -34,7 +53,9 @@ public class InputReader : ScriptableObject, InputMap.IMovementActions
             inputMap = new InputMap();
 
             inputMap.Movement.SetCallbacks(this);
-            inputMap.Movement.Enable();
+            inputMap.Dialogue.SetCallbacks(this);
+            inputMap.GameOver.SetCallbacks(this);
+            EnableDialogue();
         }
     }
     public void OnLookBig(InputAction.CallbackContext context)
@@ -77,15 +98,35 @@ public class InputReader : ScriptableObject, InputMap.IMovementActions
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void OnNext(InputAction.CallbackContext context)
     {
-        
+        if (context.phase == InputActionPhase.Started)
+        {
+            NextDialogueEvent?.Invoke();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnSkip(InputAction.CallbackContext context)
     {
-        
+        if (context.phase == InputActionPhase.Started)
+        {
+            SkipDialogueEvent?.Invoke();
+        }
+    }
+
+    public void OnRestart(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            RestartEvent?.Invoke();
+        }
+    }
+
+    public void OnQuit(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            QuitEvent?.Invoke();
+        }
     }
 }

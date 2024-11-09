@@ -7,23 +7,28 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Input Bools")]
     private bool lightControlDisabled = false;
-    private bool lightOn = true;
+    public bool lightOn { get; private set; } = true;
     public bool moving { get; private set; } = false;
-    private bool lookingBig = false;
+    public bool lookingBig { get; private set; } = false;
+    public bool turned { get; private set; } = false;
 
     [Header("Const Values")]
-    private const float speed = 3.0f;
+    private const float speed = 1.5f;
     private const float lightLerpDuration = 5.0f;
 
-    [Header("Dynamic Values")]
-    private Coroutine lerpLight;
-
     [Header("Engine References")]
-    [SerializeField] private Rigidbody2D rb;
     [SerializeField] private InputReader inputReader;
+    [SerializeField] private Rigidbody2D rb;
     [SerializeField] private GameObject flashlight;
     [SerializeField] private GameObject flashlightHolder;
     [SerializeField] private SpriteMask flashlightMask;
+
+    enum LastAction
+    {
+        None,
+        Turn,
+        LookBig
+    }
 
 
     // Start is called before the first frame update
@@ -88,9 +93,9 @@ public class PlayerController : MonoBehaviour
     {
         if (!lightControlDisabled)
         {
-            Debug.Log("flipping light");
             lightControlDisabled = true;
-            lerpLight = StartCoroutine(LerpLight());
+            turned = true;
+            StartCoroutine(LerpLight());
         }
     }
 
@@ -103,10 +108,10 @@ public class PlayerController : MonoBehaviour
 
         while (takenTime < lightLerpDuration)
         {
-            Debug.Log(takenTime / lightLerpDuration);
             takenTime += Time.deltaTime;
             currentRotation.y = Mathf.Lerp(startYRotation, targetYRotation, takenTime / lightLerpDuration);
             flashlightHolder.transform.eulerAngles = currentRotation;
+            if (takenTime > lightLerpDuration / 2) turned = false;
             yield return null;
         }
         lightControlDisabled = false;
