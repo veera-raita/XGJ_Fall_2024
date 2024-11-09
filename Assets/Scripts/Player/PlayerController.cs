@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InputReader inputReader;
     [SerializeField] private GameObject flashlight;
     [SerializeField] private GameObject flashlightHolder;
+    [SerializeField] private SpriteMask flashlightMask;
 
 
     // Start is called before the first frame update
@@ -71,8 +72,16 @@ public class PlayerController : MonoBehaviour
     private void ToggleLight()
     {
         lightOn = !lightOn;
-        if (lightOn) flashlight.GetComponent<Light2D>().intensity = 1;
-        else flashlight.GetComponent<Light2D>().intensity = 0;
+        if (lightOn)
+        {
+            flashlight.GetComponent<Light2D>().intensity = 1;
+            flashlightMask.enabled = true;
+        }
+        else
+        {
+            flashlight.GetComponent<Light2D>().intensity = 0;
+            flashlightMask.enabled = false;
+        }
     }
 
     private void FlipLight()
