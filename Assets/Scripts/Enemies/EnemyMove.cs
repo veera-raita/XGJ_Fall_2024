@@ -1,19 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class EnemyMove : MonoBehaviour
 {
-    [SerializeField] private bool goLeft = true;
+    //[SerializeField] private bool goLeft = true;
     [SerializeField] private float speed = 5f;
+    [field: SerializeField] public float spawnY { get; private set; } = -2f;
     [field: SerializeField] public bool movingType { get; private set; } = true;
     private Rigidbody2D rb;
 
-    EnemyMove(Rigidbody2D _rb, bool _goLeft)
+    private void Start()
     {
-        rb = _rb;
-        goLeft = _goLeft;
-        if (goLeft) speed = -speed;
+        rb = GetComponent<Rigidbody2D>();
     }
 
     public void MoveSelf()

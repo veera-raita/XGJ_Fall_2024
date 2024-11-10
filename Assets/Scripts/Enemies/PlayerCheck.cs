@@ -21,12 +21,10 @@ public class PlayerCheck : MonoBehaviour
     }
 
     [SerializeField] private PlayerController playerController;
-    private EnemyMove enemyMove = null;
 
     private float reactTime = 1f;
-    private float succeedTime = 0.3f;
+    private const float succeedTime = 0.3f;
     private const float fadePopTime = 1f;
-    private bool checkingBehavior = false;
     private bool playerSucceed = false;
     private bool goodEnd = false;
     private bool facingRight = true;
@@ -35,11 +33,10 @@ public class PlayerCheck : MonoBehaviour
     private CheckBehavior checkFor;
     private LoseBehavior loseBehavior;
 
-    public void Setup(CheckBehavior _checkBehavior, LoseBehavior _loseBehavior, EnemyMove _enemyMove, float _reactTime, bool _facingRight)
+    public void Setup(CheckBehavior _checkBehavior, LoseBehavior _loseBehavior, float _reactTime, bool _facingRight)
     {
         checkFor = _checkBehavior;
         loseBehavior = _loseBehavior;
-        enemyMove = _enemyMove;
         reactTime = _reactTime;
         facingRight = _facingRight;
     }
@@ -50,25 +47,13 @@ public class PlayerCheck : MonoBehaviour
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision == null) return;
         if (collision.gameObject.CompareTag("Player"))
         {
-            checkingBehavior = true;
             StartCoroutine(InputTimer());
         }
-    }
-
-    private void CallAttack()
-    {
-        GetComponent<IAttack>().Attack();
     }
 
     private void Flee()
@@ -89,16 +74,16 @@ public class PlayerCheck : MonoBehaviour
 
     private IEnumerator FadePop()
     {
+        Debug.Log("started fading");
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         Color color = spriteRenderer.color;
-        float alpha;
 
         float takenTime = 0;
 
         while (takenTime < fadePopTime)
         {
-            alpha = Mathf.Lerp(1f, 0f, takenTime / fadePopTime);
-            color.a = alpha;
+            takenTime += Time.deltaTime;
+            color.a = Mathf.Lerp(1f, 0f, takenTime / fadePopTime);
             spriteRenderer.color = color;
             yield return null;
         }

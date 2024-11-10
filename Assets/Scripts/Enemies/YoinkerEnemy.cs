@@ -6,7 +6,6 @@ public class YoinkerEnemy : MonoBehaviour, IAttack
 {
     [SerializeField] private PlayerController playerController;
     private PlayerCheck playerCheck;
-    private EnemyMove enemyMove;
     [SerializeField] private float reactTime = 1f;
     private const float offset = 0.5f;
     private const float endPosition = -0.9f;
@@ -21,8 +20,7 @@ public class YoinkerEnemy : MonoBehaviour, IAttack
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         playerCheck = GetComponent<PlayerCheck>();
-        enemyMove = GetComponent<EnemyMove>();
-        playerCheck.Setup(PlayerCheck.CheckBehavior.DidTurn, PlayerCheck.LoseBehavior.Pop, enemyMove, reactTime, facingRight);
+        playerCheck.Setup(PlayerCheck.CheckBehavior.DidTurn, PlayerCheck.LoseBehavior.Pop, reactTime, facingRight);
         StartCoroutine(Animate());
     }
 

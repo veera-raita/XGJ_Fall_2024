@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,20 +8,35 @@ using UnityEngine.SceneManagement;
 public class UIManager : MonoBehaviour
 {
     private const float maxTypeTime = 1f;
-    [SerializeField] private float typeSpeed = 16f;
+    [SerializeField] private float typeSpeed = 20f;
     private bool isTyping = false;
+    private bool doSkip = false;
     [SerializeField] private GameObject tutorialPanel;
     [SerializeField] private TextMeshProUGUI displayText;
     [SerializeField] private GameObject continuePrompt;
-    private Queue<string> paragraphs = new Queue<string>();
+    [SerializeField] private GameObject escPrompt;
+    private readonly Queue<string> paragraphs = new();
     private string p;
 
     [SerializeField] private InputReader inputReader;
     [SerializeField] private PlayerController playerController;
+    [SerializeField] private TextMeshProUGUI recordText;
+    [SerializeField] private TextMeshProUGUI currentText;
+    public static UIManager instance;
 
     // Start is called before the first frame update
     void Start()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Debug.Log("Oopsie woopsie we made a fucky wucky and now there's two UIManagers!");
+            Destroy(this);
+        }
+
         paragraphs.Enqueue("Hells...");
         paragraphs.Enqueue("Never should have agreed to this...");
         paragraphs.Enqueue("But what choice did I have? He double dog dared me!");
@@ -31,14 +47,16 @@ public class UIManager : MonoBehaviour
         DisplayNextParagraph();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Debug.LogError("Oopsie woopsie we made a fucky wucky and now there's two UIManagers!");
+        }
         inputReader.NextDialogueEvent += DialogueHandle;
         inputReader.SkipDialogueEvent += SkipHandle;
         inputReader.RestartEvent += Restart;
@@ -72,6 +90,16 @@ public class UIManager : MonoBehaviour
         DisplayNextParagraph();
     }
 
+    public void UpdateCurrentDist(int _dist)
+    {
+        currentText.text = String.Concat("Current: ", _dist.ToString(), "m");
+    }
+
+    public void UpdateRecordDist(int _dist)
+    {
+        recordText.text = String.Concat("Record: ", _dist.ToString(), "m");
+    }
+
     private void DialogueHandle()
     {
         DisplayNextParagraph();
@@ -82,13 +110,14 @@ public class UIManager : MonoBehaviour
         paragraphs.Clear();
         if (GameManager.instance.gameOver)
         {
-            paragraphs.Enqueue("Game Over\nPress [R] to restart or [Esc] to quit");
+            paragraphs.Enqueue("Game Over\nPress [R] to restart or [Esc] to quit (quit does not work in browser)");
         }
         DisplayNextParagraph();
     }
 
     private void Restart()
     {
+        inputReader.EnableDialogue();
         SceneManager.LoadScene(0);
     }
 
@@ -116,6 +145,10 @@ public class UIManager : MonoBehaviour
             p = paragraphs.Dequeue();
             StartCoroutine(TypeDialogueText(p));
         }
+        else
+        {
+            doSkip = true;
+        }
 
         displayText.text = p;
     }
@@ -131,15 +164,27 @@ public class UIManager : MonoBehaviour
         foreach (char c in _p.ToCharArray())
 
         {
+            if (doSkip) break;
             maxVisibleChars++;
             displayText.maxVisibleCharacters = maxVisibleChars;
             yield return new WaitForSeconds(maxTypeTime / typeSpeed);
         }
+
+        if (doSkip)
+        {
+            displayText.maxVisibleCharacters = p.Length;
+            doSkip = false;
+        }
+
         isTyping = false;
         if (paragraphs.Count == 0 && GameManager.instance.gameOver)
         {
             Debug.Log("last dialogue");
+            escPrompt.SetActive(true);
             inputReader.SetGameOver();
+
+            if (PlayerPrefs.GetInt("recordDist, 0") < GameManager.instance.currentDist)
+            UpdateRecordDist((int)playerController.transform.position.x);
         }
         else
         {

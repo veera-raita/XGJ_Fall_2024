@@ -38,6 +38,7 @@ public class InputReader : ScriptableObject, InputMap.IMovementActions, InputMap
     {
         inputMap.Movement.Disable();
         inputMap.Dialogue.Enable();
+        inputMap.GameOver.Disable();
     }
 
     public void SetGameOver()
@@ -58,6 +59,7 @@ public class InputReader : ScriptableObject, InputMap.IMovementActions, InputMap
             EnableDialogue();
         }
     }
+
     public void OnLookBig(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)

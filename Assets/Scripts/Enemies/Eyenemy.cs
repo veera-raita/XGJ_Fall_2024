@@ -2,50 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
-public class ChildEnemy : MonoBehaviour, IAttack
+public class Eyenemy : MonoBehaviour, IAttack
 {
-    private PlayerController playerController;
     private PlayerCheck playerCheck;
     [SerializeField] private float reactTime = 2f;
     private const float dashTime = 0.3f;
     public bool facingRight = false;
     private SpriteRenderer spriteRenderer;
+    [SerializeField] private Light2D eyeLight;
     [SerializeField] private Sprite ready;
-    [SerializeField] private Sprite attack;
 
     // Start is called before the first frame update
     void Start()
     {
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         playerCheck = GetComponent<PlayerCheck>();
-        playerCheck.Setup(PlayerCheck.CheckBehavior.LookBig, PlayerCheck.LoseBehavior.Fade, reactTime, facingRight);
+        playerCheck.Setup(PlayerCheck.CheckBehavior.LightOn, PlayerCheck.LoseBehavior.Fade, reactTime, facingRight);
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public void Attack()
     {
-        spriteRenderer.sprite = attack;
-        StartCoroutine(Dash());
+        StartCoroutine(Glow());
     }
 
-    private IEnumerator Dash()
+    private IEnumerator Glow()
     {
         float takenTime = 0f;
-
-        float moveAt = playerController.transform.position.x;
-        float moveFrom = transform.position.x;
-        Vector2 newPos = transform.position;
+        float newIntensity = 15f;
+        float startIntensity = 0f;
 
         while (takenTime < dashTime)
         {
             takenTime += Time.deltaTime;
 
-            newPos.x = Mathf.Lerp(moveFrom, moveAt, takenTime / dashTime);
-            transform.position = newPos;
+            eyeLight.intensity = Mathf.Lerp(startIntensity, newIntensity, takenTime / dashTime);
             yield return null;
         }
-
 
         GameManager.instance.EndGame();
     }

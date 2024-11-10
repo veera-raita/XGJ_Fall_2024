@@ -19,12 +19,6 @@ public class EnemySpawner : MonoBehaviour
     private bool spawnStartHelper = true;
     public bool overrideSpawner { get; set; } = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -50,12 +44,14 @@ public class EnemySpawner : MonoBehaviour
         enemyToSpawn = Instantiate(enemies[enemyIndex]);
         if (enemyToSpawn.GetComponent<EnemyMove>().movingType)
         {
-            enemyToSpawn.transform.position = new Vector2(playerController.transform.position.x + offsetFromPlayerX, transform.position.y);
+            enemyToSpawn.transform.position = new Vector2(playerController.transform.position.x + offsetFromPlayerX, enemyToSpawn.GetComponent<EnemyMove>().spawnY);
         }
         else
         {
             enemyToSpawn.transform.position = playerController.transform.position;
         }
+
+        timeUntilSpawn = Random.Range(lowerTimeLimit, upperTimeLimit);
 
         timer = 0f;
         spawning = false;

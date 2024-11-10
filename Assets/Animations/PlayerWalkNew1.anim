@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PlayerIdle
+  m_Name: PlayerWalkNew1
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,15 +21,19 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 21300000, guid: 40ce1acfe3d5e93449bc0964c7f8019e, type: 3}
+      value: {fileID: 21300000, guid: f71125ea9de31fa4d989a42d2afb35d3, type: 3}
+    - time: 0.25
+      value: {fileID: 21300000, guid: 3effd5a18951c954784cd22be91f357f, type: 3}
     - time: 0.5
-      value: {fileID: 21300000, guid: 03774291551faa944ab3cffa2751fb31, type: 3}
+      value: {fileID: 21300000, guid: e5c9ed853d5a468459295e7bf213db82, type: 3}
+    - time: 0.75
+      value: {fileID: 21300000, guid: 0b3a18b3b1b043c46a116ee80ad4b4ec, type: 3}
     - time: 1
-      value: {fileID: 21300000, guid: 4801e1cf5bde7e449918bf5c535ab969, type: 3}
+      value: {fileID: 21300000, guid: 61084ea1aa88bc743a0f90ebb9ecef70, type: 3}
+    - time: 1.25
+      value: {fileID: 21300000, guid: 9e944b0d0ad561847ba1a6048d298a8b, type: 3}
     - time: 1.5
-      value: {fileID: 21300000, guid: 03774291551faa944ab3cffa2751fb31, type: 3}
-    - time: 2
-      value: {fileID: 21300000, guid: 40ce1acfe3d5e93449bc0964c7f8019e, type: 3}
+      value: {fileID: 21300000, guid: 9e944b0d0ad561847ba1a6048d298a8b, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -52,17 +56,19 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 40ce1acfe3d5e93449bc0964c7f8019e, type: 3}
-    - {fileID: 21300000, guid: 03774291551faa944ab3cffa2751fb31, type: 3}
-    - {fileID: 21300000, guid: 4801e1cf5bde7e449918bf5c535ab969, type: 3}
-    - {fileID: 21300000, guid: 03774291551faa944ab3cffa2751fb31, type: 3}
-    - {fileID: 21300000, guid: 40ce1acfe3d5e93449bc0964c7f8019e, type: 3}
+    - {fileID: 21300000, guid: f71125ea9de31fa4d989a42d2afb35d3, type: 3}
+    - {fileID: 21300000, guid: 3effd5a18951c954784cd22be91f357f, type: 3}
+    - {fileID: 21300000, guid: e5c9ed853d5a468459295e7bf213db82, type: 3}
+    - {fileID: 21300000, guid: 0b3a18b3b1b043c46a116ee80ad4b4ec, type: 3}
+    - {fileID: 21300000, guid: 61084ea1aa88bc743a0f90ebb9ecef70, type: 3}
+    - {fileID: 21300000, guid: 9e944b0d0ad561847ba1a6048d298a8b, type: 3}
+    - {fileID: 21300000, guid: 9e944b0d0ad561847ba1a6048d298a8b, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 2.0166667
+    m_StopTime: 1.5166667
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -81,18 +87,4 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events:
-  - time: 0
-    functionName: MoveLightDown
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.5
-    functionName: MoveLightUp
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
+  m_Events: []
