@@ -7,8 +7,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private GameObject[] enemies;
     private GameObject enemyToSpawn;
-    private const float lowerTimeLimit = 10f;
-    private const float upperTimeLimit = 20f;
+    private const float lowerTimeLimit = 7f;
+    private const float upperTimeLimit = 13f;
     private const float offsetFromPlayerX = 8f;
 
     //start at upper limit to give player time to get oriented

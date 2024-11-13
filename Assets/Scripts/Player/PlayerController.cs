@@ -48,6 +48,16 @@ public class PlayerController : MonoBehaviour
         inputReader.TurnLightEvent += FlipLight;
     }
 
+    private void OnDestroy()
+    {
+        inputReader.MoveEvent -= HandleMove;
+        inputReader.MoveCanceledEvent -= HandleMoveCanceled;
+        inputReader.LookBigEvent -= LookBig;
+        inputReader.LookBigCanceledEvent -= LookBigCanceled;
+        inputReader.ToggleLightEvent -= ToggleLight;
+        inputReader.TurnLightEvent -= FlipLight;
+    }
+
     // Update is called once per frame
     void Update()
     {

@@ -63,6 +63,14 @@ public class UIManager : MonoBehaviour
         inputReader.QuitEvent += QuitGame;
     }
 
+    private void OnDestroy()
+    {
+        inputReader.NextDialogueEvent -= DialogueHandle;
+        inputReader.SkipDialogueEvent -= SkipHandle;
+        inputReader.RestartEvent -= Restart;
+        inputReader.QuitEvent -= QuitGame;
+    }
+
     public void GameOver()
     {
         tutorialPanel.SetActive(true);
@@ -183,7 +191,7 @@ public class UIManager : MonoBehaviour
             escPrompt.SetActive(true);
             inputReader.SetGameOver();
 
-            if (PlayerPrefs.GetInt("recordDist, 0") < GameManager.instance.currentDist)
+            if (GameManager.instance.recordDist < GameManager.instance.currentDist)
             UpdateRecordDist((int)playerController.transform.position.x);
         }
         else

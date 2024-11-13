@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] InputReader inputReader;
     public bool tutorialRunning { get; set; } = true;
     public bool gameOver { get; private set; } = false;
-    private int recordDist;
+    public int recordDist { get; private set; }
     public int currentDist { get; set; }
 
     // Start is called before the first frame update
